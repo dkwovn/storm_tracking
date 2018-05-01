@@ -1,0 +1,6 @@
+*.mod
+*.o
+
+*.err
+*.out
+*.txt

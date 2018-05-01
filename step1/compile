@@ -1,0 +1,7 @@
+#!/bin/bash
+rm -f *.o
+rm -f *.mod
+ifort -c tools.f90
+ifort -c find_feature_points.f90
+ifort *.o -o step1
+

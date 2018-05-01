@@ -1,0 +1,23 @@
+&metrics_nml
+nx		=	480 ,     ! # of grids in x 
+ny		=	241 ,     ! # of grids in y
+lat_min	=	25.0 	, ! domain
+lat_max	=   80.0 ,    ! domain
+lon0	=	0.0	,     ! original file lon0
+lat0	=	-90.0	, ! original file lat0
+dlon	=	0.75	, ! resolution of the data
+dlat	= 	0.75	,
+threshold	=	5e-5	,
+cntr_thre	=	5e-5	,
+area_thre	= 	5e10	/
+
+&files_nml
+dfile_path 	=	"/home/cliu/data/era/6hourly/rvor850/mam/",
+ofile_field_path = '/home/cliu/data/era/6hourly/rvor_cycl/mam/',
+ofile_list_path = '/home/cliu/data/era/6hourly/rvor_cycl/mam/',
+dfile_var = 'rvor', 
+ofile_field_var = 'rvor_cycl', 
+ofile_list_var = 'rvor_cycl_list',
+yr_st		=	1997,
+yr_end		=	1998 /
+

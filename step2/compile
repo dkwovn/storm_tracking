@@ -1,0 +1,10 @@
+#!/bin/bash
+rm -f *.o
+rm -f *.mod
+gfortran -ffree-line-length-none -fbacktrace -fbounds-check -c tools.f90
+gfortran -ffree-line-length-none -fbacktrace -fbounds-check -c io.f90
+gfortran -ffree-line-length-none -fbacktrace -fbounds-check -c domain.f90
+gfortran -ffree-line-length-none -fbacktrace -fbounds-check -c track_manager.f90
+gfortran -ffree-line-length-none -fbacktrace -fbounds-check -c main.f90
+gfortran *.o -fbacktrace -fbounds-check -o step2
+
