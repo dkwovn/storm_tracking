@@ -1,30 +1,30 @@
 !Module:
-!	subroutines for input/output, variables that read data or are output.
+!    subroutines for input/output, variables that read data or are output.
 !History:
-!11/10/2014	cliu	1st version
+!11/10/2014    cliu    1st version
 
 Module io
 implicit none
 private
 public init_io, open_dfile, open_dfile2, &
-	   open_ofile_txt, open_ofile, &
-		nml_unit, nml_file
+       open_ofile_txt, open_ofile, &
+        nml_unit, nml_file
 logical :: module_is_initialized = .false.
 integer :: nml_unit, dfile_unit, dfile2_unit, ofile_unit, ofile_txt_unit
 character(len=100) :: nml_file = 'cyclone_tracking_namelist.nml'
 !=== define namelist variables ===
 character(len=100) :: dfile_path = '/home/cliu/data/merra/6hourly/rvor_cycl/'
-character(len=100) :: dfile_var	= 'rvor_cycl_list'
+character(len=100) :: dfile_var    = 'rvor_cycl_list'
 character(len=100) :: dfile2_path = '/home/cliu/data/merra/6hourly/rvor/'
 character(len=100) :: dfile2_var = 'rvor850'
 character(len=100) :: ofile_path = '/home/cliu/data/merra/6hourly/cycloTRACK/'
-character(len=100) :: ofile_var	= 'cyclo_track'
+character(len=100) :: ofile_var    = 'cyclo_track'
 character(len=100) :: ofile_txt_var = 'cyclo_track'
 !=== define namelist ===
-namelist /io_nml/	dfile_path, dfile_var, &
-					dfile2_path, dfile2_var, &
-					ofile_path, ofile_var, &
-					ofile_txt_var
+namelist /io_nml/   dfile_path, dfile_var, &
+                    dfile2_path, dfile2_var, &
+                    ofile_path, ofile_var, &
+                    ofile_txt_var
 contains
 
 subroutine init_io

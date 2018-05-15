@@ -1,11 +1,11 @@
 !Program:
-!	Subroutines and functions that are used in cyclone tracking
+!    Subroutines and functions that are used in cyclone tracking
 !History:
-!11/07/2014 cliu	1st version
+!11/07/2014 cliu    1st version
 
 module tools
 implicit none
-public	neighbouring
+public    neighbouring
 public  tools_init
 public  point
 public  frame
@@ -36,20 +36,20 @@ end type
 real,parameter::pi=3.14159265359, eps=1e-6, a=6371000
 character(len=100),parameter::nml_file='cyclone_tracking_namelist.nml'
 !=== namelist variables ===
-integer	:: nx		=	144, &
-		   ny		= 	73 
+integer    :: nx        =    144, &
+           ny        =     73 
 
-real	:: lon0		=	0.0, &
-		   lat0		=	-90, &
-		   lon_min	=	0.0, &
-		   lon_max	=	360.0, &
-		   lat_min	=	20.0, &
-		   lat_max	=	90.0, &
-		   dlon		=	2.5, &
-		   dlat		=	2.5, &
-		   threshold	=	3e-5, &
-		   cntr_thre	=	5e-5, &
-		   area_thre	=	2e10
+real    :: lon0        =    0.0, &
+           lat0        =    -90, &
+           lon_min    =    0.0, &
+           lon_max    =    360.0, &
+           lat_min    =    20.0, &
+           lat_max    =    90.0, &
+           dlon        =    2.5, &
+           dlat        =    2.5, &
+           threshold    =    3e-5, &
+           cntr_thre    =    5e-5, &
+           area_thre    =    2e10
 
 integer :: feature_point_option = 1
 !=== allocable variables ===
@@ -59,14 +59,14 @@ integer, allocatable :: label_field(:,:)
 !===========================
 logical :: MODULE_IS_INITIALIZED = .false.
 !=== define namelist ===
-namelist /metrics_nml/ 	nx, ny, &
-						lon_min, lon_max, &
-						lat_min, lat_max, &
-						dlon, dlat, &
-						lon0, lat0, &
-						threshold, cntr_thre, &
-						feature_point_option, &
-						area_thre
+namelist /metrics_nml/     nx, ny, &
+                        lon_min, lon_max, &
+                        lat_min, lat_max, &
+                        dlon, dlat, &
+                        lon0, lat0, &
+                        threshold, cntr_thre, &
+                        feature_point_option, &
+                        area_thre
 !=======================
 
 contains
@@ -92,12 +92,12 @@ allocate(lat(ny))
 allocate(lon_rad(nx))
 allocate(lat_rad(ny))
 do i = 1, nx
-	lon(i) = lon0 + (i-1)*dlon
-	lon_rad(i)=lon(i)*pi/180.0
+    lon(i) = lon0 + (i-1)*dlon
+    lon_rad(i)=lon(i)*pi/180.0
 end do
 do j = 1, ny
-	lat(j) = lat0 + (j-1)*dlat
-	lat_rad(j)=lat(j)*pi/180.0
+    lat(j) = lat0 + (j-1)*dlat
+    lat_rad(j)=lat(j)*pi/180.0
 end do
 end subroutine calculate_lon_lat
 
@@ -117,10 +117,10 @@ label_field(x0,y0) = label
 area = area + (dlon*pi/180.0*a*cos(lat_rad(y0))) * (dlat*pi/180.0*a)
 call get_cord(x0,y0,en_x,en_y,nx,ny)
 do i=0,7,2
-	if(field(en_x(i),en_y(i))>=threshold.and.label_field(en_x(i),en_y(i))==0&
-	.and.lat(y0)>=lat_min.and.lat(y0)<=lat_max)then
-		call neighbouring(field,en_x(i),en_y(i),threshold,label_field,area,label)
-	end if
+    if(field(en_x(i),en_y(i))>=threshold.and.label_field(en_x(i),en_y(i))==0&
+    .and.lat(y0)>=lat_min.and.lat(y0)<=lat_max)then
+        call neighbouring(field,en_x(i),en_y(i),threshold,label_field,area,label)
+    end if
 end do
 
 end subroutine neighbouring
@@ -137,55 +137,55 @@ integer :: i, j, k, en_x(0:7), en_y(0:7)
 integer :: cnt
 real :: mx_tmp, mn_tmp
 if(.not.MODULE_IS_INITIALIZED)then
-	print*,'Tools_mod is not initialized. get_feature_points'
-	stop
+    print*,'Tools_mod is not initialized. get_feature_points'
+    stop
 end if
 if(option == 1)then
-	allocate(feature_points_frame%first)
-	p=>feature_points_frame%first
-	do i = 1, nx
-		do j = 1, ny
-			if(label_field(i,j) >= 1.and.area(label_field(i,j)) > area_thre)then
-				call get_cord(i,j,en_x,en_y,nx,ny)
-				mx_tmp = 0
-				do k = 0, 7
-					if(field_orig(en_x(k),en_y(k)) < -999)then
-						mx_tmp = 999
-						exit
-					end if
-					if(field_orig(en_x(k),en_y(k)) >= mx_tmp)then
-						mx_tmp = field_orig(en_x(k),en_y(k))
-					end if
-				end do
-				if(field_orig(i,j) > mx_tmp.and.field_orig(i,j) > cntr_thre)then
-					mn_tmp = 0
-					cnt = 0
-					do k = 0, 7
-						if(field_orig(en_x(k),en_y(k))>0)then
-							mn_tmp = mn_tmp + field_orig(en_x(k),en_y(k))
-							cnt = cnt + 1
-						end if
-					end do
-					mn_tmp = mn_tmp/cnt
-					p%x = i
-					p%y = j
-					p%lon = lon(i)
-					p%lat = lat(j)
-					p%value = mn_tmp
-					feature_points_frame%num=feature_points_frame%num+1
-					allocate(p%next)
-					p%next%prev=>p
-					p=>p%next
-				end if
-			end if
-		end do
-	end do
+    allocate(feature_points_frame%first)
+    p=>feature_points_frame%first
+    do i = 1, nx
+        do j = 1, ny
+            if(label_field(i,j) >= 1.and.area(label_field(i,j)) > area_thre)then
+                call get_cord(i,j,en_x,en_y,nx,ny)
+                mx_tmp = 0
+                do k = 0, 7
+                    if(field_orig(en_x(k),en_y(k)) < -999)then
+                        mx_tmp = 999
+                        exit
+                    end if
+                    if(field_orig(en_x(k),en_y(k)) >= mx_tmp)then
+                        mx_tmp = field_orig(en_x(k),en_y(k))
+                    end if
+                end do
+                if(field_orig(i,j) > mx_tmp.and.field_orig(i,j) > cntr_thre)then
+                    mn_tmp = 0
+                    cnt = 0
+                    do k = 0, 7
+                        if(field_orig(en_x(k),en_y(k))>0)then
+                            mn_tmp = mn_tmp + field_orig(en_x(k),en_y(k))
+                            cnt = cnt + 1
+                        end if
+                    end do
+                    mn_tmp = mn_tmp/cnt
+                    p%x = i
+                    p%y = j
+                    p%lon = lon(i)
+                    p%lat = lat(j)
+                    p%value = mn_tmp
+                    feature_points_frame%num=feature_points_frame%num+1
+                    allocate(p%next)
+                    p%next%prev=>p
+                    p=>p%next
+                end if
+            end if
+        end do
+    end do
 
-	if(associated(p%prev))then
-		p=>p%prev
-		if(associated(p%next)) deallocate(p%next)
-		p%next=>null()
-	end if
+    if(associated(p%prev))then
+        p=>p%prev
+        if(associated(p%next)) deallocate(p%next)
+        p%next=>null()
+    end if
 end if
 end subroutine get_feature_points
 
@@ -193,7 +193,7 @@ function ifleap(yr)
 integer :: yr
 logical :: ifleap
 if(mod(yr,4) == 0 .and. mod(yr,100)/=0 .or. mod(yr,400) == 0)then
-	ifleap = .TRUE.
+    ifleap = .TRUE.
 end if
 end function ifleap
 
@@ -202,8 +202,8 @@ type(frame) :: points_frame(:)
 integer :: nt, t
 nt = size(points_frame,1)
 do t = 1, nt
-	points_frame(t)%num = 0
-	points_frame(t)%first => null()
+    points_frame(t)%num = 0
+    points_frame(t)%first => null()
 end do
 end subroutine
 
@@ -215,23 +215,23 @@ integer,intent(out)::en_x(0:7),en_y(0:7)
 integer::k
 real::dx,dy
 do k=0,7
-	if(abs(cos(pi/4*k))>eps)then
-		dx=cos(pi/4*k)/abs(cos(pi/4*k))
-	else
-		dx=0
-	end if
-	if(abs(sin(pi/4*k))>eps)then
-		dy=sin(pi/4*k)/abs(sin(pi/4*k))
-	else
-		dy=0
-	end if
-	en_x(k)=x+dx
-	en_y(k)=y+dy
-	if(en_x(k)>nx)then
-		en_x(k)=en_x(k)-nx
-	else if(en_x(k)<1)then
-		en_x(k)=en_x(k)+nx
-	end if
+    if(abs(cos(pi/4*k))>eps)then
+        dx=cos(pi/4*k)/abs(cos(pi/4*k))
+    else
+        dx=0
+    end if
+    if(abs(sin(pi/4*k))>eps)then
+        dy=sin(pi/4*k)/abs(sin(pi/4*k))
+    else
+        dy=0
+    end if
+    en_x(k)=x+dx
+    en_y(k)=y+dy
+    if(en_x(k)>nx)then
+        en_x(k)=en_x(k)-nx
+    else if(en_x(k)<1)then
+        en_x(k)=en_x(k)+nx
+    end if
 end do
 end subroutine
 
